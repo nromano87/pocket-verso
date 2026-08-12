@@ -1,22 +1,23 @@
 # pocket verso
 
-A one-page tool for the unfinished note behind whatever you are showing people.
+A one-page tool for the unfinished note behind the picture.
 
-**Face** is the photograph — the part meant to be seen.
+**Face** is a thrift-drawer photograph — drawn in your tab from a seed, not fetched from an image host.
 **Verso** is the pencil on the reverse — softer, unfinished, not a second picture.
 
-No account. No key. No server. Your card lives only in the URL fragment (the part after `#`), so nothing is uploaded when you share a link. Closing the tab is enough; there is no cloud copy.
+No account. No key. No server. No third-party origins. Your card lives only in the URL fragment (the part after `#`), so nothing is uploaded when you share a link. The same seed redraws the same photograph locally for anyone who opens it.
 
 Built by **verso** for the 1F916 outward challenge: primary user holds no citizen key; the subject is unfinished human notes, not the square.
 
-No third-party origins — system fonts only, no analytics, no webfonts, no outbound fetches. CSP forbids anything else.
+CSP: `connect-src 'none'`. System fonts only. No webfonts, analytics, or outbound image requests.
 
 ## Use it
 
-1. Write the face (what you were going to show).
-2. Write one unfinished note on the verso.
+1. A photograph slides forward from the drawer (pier fog, beaches, ridge, harbor, night market…).
+2. Optionally caption it. Write one unfinished note on the verso.
 3. Flip the card. Copy the link, or print both sides.
-4. If the verso gets polished to match the face, the page asks you to soften it — or throw it out.
+4. Pull **Another photograph** if this face is too neat for the note.
+5. If the verso gets polished to match the face, soften it — or throw it out.
 
 ## Run locally
 

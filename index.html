@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>pocket verso — the unfinished note behind the picture</title>
-  <meta name="description" content="Slip one unfinished note behind whatever you were showing people. No account. No key. Nothing leaves this tab unless you copy the link." />
+  <meta name="description" content="A thrift-drawer postcard: a photograph drawn in your tab, and one unfinished note on the reverse. No account. No key. No third-party image host." />
   <meta name="theme-color" content="#1a2230" />
   <meta name="referrer" content="no-referrer" />
   <link rel="stylesheet" href="styles.css" />
@@ -19,9 +19,9 @@
       <p class="brand">pocket verso</p>
       <h1>The unfinished note behind the picture.</h1>
       <p class="lede">
-        Face is what you show. Verso is the softer reverse —
-        milk, twine, ask M about Tuesday.
-        No account. No upload. The card lives in the link.
+        Face is a thrift-store photograph, drawn in this tab —
+        fog over a pier, a beach drawer, a ridge nobody labeled.
+        Verso is the softer reverse. No account. No upload. No image host.
       </p>
     </header>
 
@@ -30,15 +30,20 @@
         <div class="card" id="card">
           <div class="face side" id="face-side">
             <p class="side-label">face</p>
-            <label class="sr-only" for="face">Face — what you are showing</label>
-            <textarea
-              id="face"
-              maxlength="480"
-              rows="7"
-              placeholder="What you were going to show people…"
+            <div class="photo-wrap">
+              <canvas id="photo" width="640" height="400" role="img" aria-label="Generated postcard photograph"></canvas>
+              <p class="place-chip" id="place-chip"></p>
+            </div>
+            <label class="sr-only" for="caption">Optional caption on the photograph</label>
+            <input
+              id="caption"
+              class="caption"
+              maxlength="80"
+              placeholder="Optional caption…"
               spellcheck="true"
-            ></textarea>
-            <p class="hint">Photograph side. Meant to be seen.</p>
+              autocomplete="off"
+            />
+            <p class="hint">Photograph side. Drawn here — nothing was fetched.</p>
           </div>
           <div class="verso side" id="verso-side">
             <p class="side-label">verso</p>
@@ -57,6 +62,7 @@
 
       <div class="controls">
         <button type="button" class="cta" id="flip">Flip the card</button>
+        <button type="button" class="ghost" id="reshuffle">Another photograph</button>
         <button type="button" class="ghost" id="copy-link">Copy link</button>
         <button type="button" class="ghost" id="print-card">Print both sides</button>
         <button type="button" class="ghost danger" id="clear">Throw out</button>
@@ -69,13 +75,14 @@
     <section class="how" aria-label="How it works">
       <h2>What a stranger can do</h2>
       <ul>
-        <li>Write a face and one unfinished verso — no key, no signup.</li>
-        <li>Flip between sides. Share a link that carries both (hash only; nothing is posted).</li>
-        <li>Print face and reverse on one sheet.</li>
+        <li>Get a thrift-drawer photograph drawn in the tab — no key, no signup, no image API.</li>
+        <li>Slip one unfinished note on the reverse. Flip, share a link, or print both sides.</li>
+        <li>Pull another photograph if this one is too neat for the note.</li>
         <li>Keep the reverse softer than the picture — or throw the card out.</li>
       </ul>
       <p class="fine">
         Subject is unfinished notes, not any board or society.
+        The face is generated locally from a seed in the URL; nothing leaves this origin.
         Source is public. MIT. Built by verso.
       </p>
     </section>
@@ -84,6 +91,7 @@
   <aside class="print-sheet" aria-hidden="true">
     <div class="print-face">
       <p class="print-brand">pocket verso · face</p>
+      <img id="print-photo" alt="" />
       <p class="print-body" id="print-face"></p>
     </div>
     <div class="print-verso">
