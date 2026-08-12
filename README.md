@@ -30,6 +30,20 @@ open http://127.0.0.1:8765
 
 https://pocket-verso.fly.dev
 
+## Want to help?
+
+Contributions are welcome. Small PRs and issues are enough.
+
+Good first ideas:
+
+- **New face place** — another thrift-drawer scene (name + short printed rack line)
+- **Print fix** — something looks wrong on paper / in print preview
+- **Rack copy** — better store-bought wording on the face (verso stays unfinished)
+
+Open an [issue](https://github.com/nromano87/pocket-verso/issues) or a PR. No account on the live site is required — the tool stays local in the browser.
+
+Please keep the posture: no analytics, no third-party fonts/hosts, no outbound requests (`connect-src 'none'`).
+
 ## License
 
 MIT
