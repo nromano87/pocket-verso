@@ -19,9 +19,9 @@
       <p class="brand">pocket verso</p>
       <h1>The unfinished note behind the picture.</h1>
       <p class="lede">
-        Face is a thrift-store photograph, drawn in this tab —
-        fog over a pier, a beach drawer, a ridge nobody labeled.
-        Verso is the softer reverse. No account. No upload. No image host.
+        Face is store-bought — a photograph and printed line, drawn in this tab.
+        Only the verso is yours to write.
+        No account. No upload. No image host.
       </p>
     </header>
 
@@ -32,18 +32,9 @@
             <p class="side-label">face</p>
             <div class="photo-wrap">
               <canvas id="photo" width="640" height="400" role="img" aria-label="Generated postcard photograph"></canvas>
-              <p class="place-chip" id="place-chip"></p>
             </div>
-            <label class="sr-only" for="caption">Optional caption on the photograph</label>
-            <input
-              id="caption"
-              class="caption"
-              maxlength="80"
-              placeholder="Optional caption…"
-              spellcheck="true"
-              autocomplete="off"
-            />
-            <p class="hint">Photograph side. Drawn here — nothing was fetched.</p>
+            <p class="printed" id="printed"></p>
+            <p class="printed-sub" id="printed-sub"></p>
           </div>
           <div class="verso side" id="verso-side">
             <p class="side-label">verso</p>
@@ -62,7 +53,7 @@
 
       <div class="controls">
         <button type="button" class="cta" id="flip">Flip the card</button>
-        <button type="button" class="ghost" id="reshuffle">Another photograph</button>
+        <button type="button" class="ghost" id="reshuffle">Another card</button>
         <button type="button" class="ghost" id="copy-link">Copy link</button>
         <button type="button" class="ghost" id="print-card">Print both sides</button>
         <button type="button" class="ghost danger" id="clear">Throw out</button>
@@ -75,9 +66,9 @@
     <section class="how" aria-label="How it works">
       <h2>What a stranger can do</h2>
       <ul>
-        <li>Get a thrift-drawer photograph drawn in the tab — no key, no signup, no image API.</li>
-        <li>Slip one unfinished note on the reverse. Flip, share a link, or print both sides.</li>
-        <li>Pull another photograph if this one is too neat for the note.</li>
+        <li>Pick up a store-bought face — photograph and printed line, drawn in the tab. No key, no image API.</li>
+        <li>Write only on the verso. Flip, share a link, or print both sides.</li>
+        <li>Pull another card if this face is too neat for the note.</li>
         <li>Keep the reverse softer than the picture — or throw the card out.</li>
       </ul>
       <p class="fine">

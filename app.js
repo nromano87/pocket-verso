@@ -7,12 +7,12 @@
   // link reproduces the same face without leaving this origin.
 
   const $ = (id) => document.getElementById(id);
-  const captionEl = $("caption");
   const versoEl = $("verso");
   const cardEl = $("card");
   const statusEl = $("status");
   const softnessEl = $("softness");
-  const placeChip = $("place-chip");
+  const printedEl = $("printed");
+  const printedSubEl = $("printed-sub");
   const canvas = $("photo");
   const ctx = canvas.getContext("2d");
   const printFace = $("print-face");
@@ -30,14 +30,44 @@
     "warm regards",
   ];
 
-  // Thrift-drawer places — filed by picture, not by the life on the reverse.
+  // Store-bought faces — photograph + printed copy. Only the verso is writable.
   const PLACES = [
-    { id: "pier", label: "Fog over a pier", draw: drawPier },
-    { id: "beach", label: "Assorted beaches", draw: drawBeach },
-    { id: "falls", label: "Niagara drawer", draw: drawFalls },
-    { id: "ridge", label: "Unlabeled ridge", draw: drawRidge },
-    { id: "harbor", label: "Harbor at dusk", draw: drawHarbor },
-    { id: "market", label: "Night market light", draw: drawMarket },
+    {
+      id: "pier",
+      draw: drawPier,
+      titles: ["Greetings from the Pier", "Fog Over the Waterfront", "Scenic Pier Series"],
+      subs: ["No. 14 — Coastal Views", "Printed for the rack", "A souvenir of nowhere particular"],
+    },
+    {
+      id: "beach",
+      draw: drawBeach,
+      titles: ["Assorted Beaches", "Sun & Sand Greetings", "Shoreline Souvenir"],
+      subs: ["Series B — Warm Horizons", "Stock card · beach drawer", "Wish-you-were-here optional"],
+    },
+    {
+      id: "falls",
+      draw: drawFalls,
+      titles: ["Niagara Views", "The Falls, Looking Away", "Mist & Thunder"],
+      subs: ["Scenic Series No. 7", "Rack copy · water & rock", "A picture that travels alone"],
+    },
+    {
+      id: "ridge",
+      draw: drawRidge,
+      titles: ["Unlabeled Ridge", "Mountain Air Greeting", "High Country Views"],
+      subs: ["Trail Series · unsigned", "Printed far from the trail", "For the drawer marked elsewhere"],
+    },
+    {
+      id: "harbor",
+      draw: drawHarbor,
+      titles: ["Harbor at Dusk", "Evening on the Quay", "Masts & Late Light"],
+      subs: ["Harbor Series No. 3", "A card from the dock rack", "Stock dusk · warm wash"],
+    },
+    {
+      id: "market",
+      draw: drawMarket,
+      titles: ["Night Market Lights", "After Dark, Stall Row", "Lantern Street Greeting"],
+      subs: ["Night Series · rack stock", "Printed warm, sold cool", "A face that never knew your note"],
+    },
   ];
 
   let seed = 1;
@@ -55,13 +85,20 @@
     return PLACES[Math.abs(s) % PLACES.length];
   }
 
+  function printedCopy(s) {
+    const place = placeFor(s);
+    const rand = mulberry32((s >>> 0) ^ 0x9e3779b9);
+    const title = place.titles[Math.floor(rand() * place.titles.length)];
+    const sub = place.subs[Math.floor(rand() * place.subs.length)];
+    return { title, sub };
+  }
+
   function newSeed() {
     return (Math.floor(Math.random() * 0xffffffff) || 1) >>> 0;
   }
 
-  function encodeCard(caption, verso, s) {
+  function encodeCard(verso, s) {
     const payload = JSON.stringify({
-      f: caption,
       v: verso,
       s: s >>> 0,
     });
@@ -83,7 +120,6 @@
       const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
       const data = JSON.parse(new TextDecoder().decode(bytes));
       return {
-        f: typeof data.f === "string" ? data.f.slice(0, 80) : "",
         v: typeof data.v === "string" ? data.v.slice(0, 480) : "",
         s: Number.isFinite(data.s) ? data.s >>> 0 : newSeed(),
       };
@@ -97,8 +133,8 @@
   }
 
   function faceText() {
-    const cap = captionEl.value.trim();
-    return cap || placeFor(seed).label;
+    const copy = printedCopy(seed);
+    return `${copy.title} ${copy.sub}`;
   }
 
   function softnessReport(face, verso) {
@@ -416,31 +452,33 @@
 
   function paint() {
     const place = placeFor(seed);
+    const copy = printedCopy(seed);
     const rand = mulberry32(seed || 1);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     place.draw(rand);
-    placeChip.textContent = place.label;
-    canvas.setAttribute("aria-label", `Postcard photograph: ${place.label}`);
+    printedEl.textContent = copy.title;
+    printedSubEl.textContent = copy.sub;
+    canvas.setAttribute("aria-label", `Store-bought postcard: ${copy.title}`);
     printPhoto.src = canvas.toDataURL("image/png");
+    printFace.textContent = `${copy.title}\n${copy.sub}`;
   }
 
   function syncHash() {
-    const token = encodeCard(captionEl.value, versoEl.value, seed);
+    const token = encodeCard(versoEl.value, seed);
     const next = `#${token}`;
     if (location.hash !== next) {
       history.replaceState(null, "", next);
     }
     updateSoftness();
-    printFace.textContent = faceText();
     printVerso.textContent = versoEl.value || "—";
   }
 
   function updateSoftness() {
-    const report = softnessReport(faceText(), versoEl.value);
-    if (!versoEl.value.trim() && !captionEl.value.trim()) {
+    if (!versoEl.value.trim()) {
       softnessEl.hidden = true;
       return;
     }
+    const report = softnessReport(faceText(), versoEl.value);
     softnessEl.hidden = false;
     softnessEl.textContent = report.text;
     softnessEl.classList.toggle("ok", report.ok);
@@ -449,23 +487,20 @@
   function loadFromHash() {
     const data = decodeCard(location.hash);
     if (data) {
-      captionEl.value = data.f;
       versoEl.value = data.v;
       seed = data.s || newSeed();
       paint();
-      printFace.textContent = faceText();
       printVerso.textContent = data.v || "—";
       updateSoftness();
       statusEl.textContent =
-        "Loaded from the link. Photograph redrawn locally from the seed — nothing was fetched.";
+        "Loaded from the link. Store-bought face redrawn locally from the seed.";
       return;
     }
     seed = newSeed();
-    captionEl.value = "";
     versoEl.value = "";
     paint();
     syncHash();
-    statusEl.textContent = "A photograph from the drawer. Drawn here; no image host involved.";
+    statusEl.textContent = "A store-bought card from the rack. Only the verso is yours.";
   }
 
   function setFlipped(flipped) {
@@ -486,14 +521,14 @@
     paint();
     setFlipped(false);
     syncHash();
-    statusEl.textContent = `Another drawer slot: ${placeFor(seed).label}. Still local.`;
+    statusEl.textContent = `Another card from the rack: ${printedCopy(seed).title}.`;
   });
 
   $("copy-link").addEventListener("click", async () => {
     syncHash();
     try {
       await navigator.clipboard.writeText(location.href);
-      statusEl.textContent = "Link copied. Same photograph, same note — still no server.";
+      statusEl.textContent = "Link copied. Same card, same note — still no server.";
     } catch (_) {
       statusEl.textContent = "Copy failed. Select the address bar — the card is already in the URL.";
     }
@@ -506,16 +541,14 @@
   });
 
   $("clear").addEventListener("click", () => {
-    captionEl.value = "";
     versoEl.value = "";
     seed = newSeed();
     setFlipped(false);
     paint();
     syncHash();
-    statusEl.textContent = "Thrown out. A new photograph slid forward in the drawer.";
+    statusEl.textContent = "Thrown out. Another store-bought face slid forward.";
   });
 
-  captionEl.addEventListener("input", syncHash);
   versoEl.addEventListener("input", syncHash);
   window.addEventListener("hashchange", loadFromHash);
 
