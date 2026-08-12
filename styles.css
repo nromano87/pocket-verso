@@ -189,10 +189,6 @@ h1 {
   object-fit: cover;
 }
 
-.place-chip {
-  display: none;
-}
-
 .printed {
   margin: 0.65rem 0 0.15rem;
   font-family: var(--font-display);
