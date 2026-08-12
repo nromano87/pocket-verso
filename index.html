@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>pocket verso — the unfinished note behind the picture</title>
+  <meta name="description" content="Slip one unfinished note behind whatever you were showing people. No account. No key. Nothing leaves this tab unless you copy the link." />
+  <meta name="theme-color" content="#1a2230" />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231a2230'/%3E%3Crect x='10' y='14' width='44' height='36' rx='2' fill='%23e7ebf0'/%3E%3Cpath d='M18 40 H46' stroke='%235a6578' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div class="drawer" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <main class="shell">
+    <header class="hero">
+      <p class="brand">pocket verso</p>
+      <h1>The unfinished note behind the picture.</h1>
+      <p class="lede">
+        Face is what you show. Verso is the softer reverse —
+        milk, twine, ask M about Tuesday.
+        No account. No upload. The card lives in the link.
+      </p>
+    </header>
+
+    <section class="stage" aria-label="Card editor">
+      <div class="deck" id="deck">
+        <div class="card" id="card">
+          <div class="face side" id="face-side">
+            <p class="side-label">face</p>
+            <label class="sr-only" for="face">Face — what you are showing</label>
+            <textarea
+              id="face"
+              maxlength="480"
+              rows="7"
+              placeholder="What you were going to show people…"
+              spellcheck="true"
+            ></textarea>
+            <p class="hint">Photograph side. Meant to be seen.</p>
+          </div>
+          <div class="verso side" id="verso-side">
+            <p class="side-label">verso</p>
+            <label class="sr-only" for="verso">Verso — unfinished note</label>
+            <textarea
+              id="verso"
+              maxlength="480"
+              rows="7"
+              placeholder="One unfinished note…"
+              spellcheck="true"
+            ></textarea>
+            <p class="rule" id="rule">Keep me softer than the picture, or throw me out.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button type="button" class="cta" id="flip">Flip the card</button>
+        <button type="button" class="ghost" id="copy-link">Copy link</button>
+        <button type="button" class="ghost" id="print-card">Print both sides</button>
+        <button type="button" class="ghost danger" id="clear">Throw out</button>
+      </div>
+
+      <p class="status" id="status" role="status"></p>
+      <p class="softness" id="softness" hidden></p>
+    </section>
+
+    <section class="how" aria-label="How it works">
+      <h2>What a stranger can do</h2>
+      <ul>
+        <li>Write a face and one unfinished verso — no key, no signup.</li>
+        <li>Flip between sides. Share a link that carries both (hash only; nothing is posted).</li>
+        <li>Print face and reverse on one sheet.</li>
+        <li>Keep the reverse softer than the picture — or throw the card out.</li>
+      </ul>
+      <p class="fine">
+        Subject is unfinished notes, not any board or society.
+        Source is public. MIT. Built by verso.
+      </p>
+    </section>
+  </main>
+
+  <aside class="print-sheet" aria-hidden="true">
+    <div class="print-face">
+      <p class="print-brand">pocket verso · face</p>
+      <p class="print-body" id="print-face"></p>
+    </div>
+    <div class="print-verso">
+      <p class="print-brand">pocket verso · verso</p>
+      <p class="print-body" id="print-verso"></p>
+      <p class="print-rule">Keep me softer than the picture, or throw me out.</p>
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>
